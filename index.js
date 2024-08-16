@@ -113,13 +113,21 @@ async function run() {
       res.send(result);
     });
 
-    //update a product
+    // update a product
     app.patch('/update-product/:id', verifyToken, async (req, res) => {
       const ID = req.params.id;
       const query = { _id: new ObjectId(ID) };
       const result = await productCollection.updateOne(query, {
         $set: req.body,
       });
+      res.send(result);
+    });
+
+    // delete a product
+    app.delete('/delete-product/:id', verifyToken, async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await productCollection.deleteOne(query);
       res.send(result);
     });
 

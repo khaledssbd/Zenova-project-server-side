@@ -64,9 +64,16 @@ async function run() {
   try {
     const productCollection = client.db('zenovaDB').collection('products');
 
-    
-    
-    
+    // auth related API
+    // gives token when user login
+    app.post('/getJwtToken', async (req, res) => {
+      const user = req.body;
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: '4h',
+      });
+      res.cookie('token', token, cookieOptions).send({ success: true });
+    });
+
     // Send a ping to confirm a successful connection to DB
     await client.db('admin').command({ ping: 1 });
     console.log(

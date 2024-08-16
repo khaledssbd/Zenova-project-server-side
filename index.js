@@ -95,6 +95,13 @@ async function run() {
       res.send(result);
     });
 
+    // Get product details
+    app.get('/product-details/:id', async (req, res) => {
+      const Id = req.params.id;
+      const query = { _id: new ObjectId(Id) };
+      const result = await productCollection.findOne(query);
+      res.send(result);
+    });
 
     
 

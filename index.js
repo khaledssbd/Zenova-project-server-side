@@ -103,6 +103,17 @@ async function run() {
       res.send(result);
     });
 
+    // get my product
+    app.get('/my-products', verifyToken, async (req, res) => {
+      // use req?.query?.email istead of req?.user?.email
+      // because in verifyToken there is no req.user.email
+      const result = await productCollection
+        .find({ sellerEmail: req?.query?.email })
+        .toArray();
+      res.send(result);
+    });
+
+
     
 
     // Send a ping to confirm a successful connection to DB

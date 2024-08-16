@@ -74,6 +74,13 @@ async function run() {
       res.cookie('token', token, cookieOptions).send({ success: true });
     });
 
+    // deletes token when user logout
+    app.post('/deleteJwtToken', async (req, res) => {
+      res
+        .clearCookie('token', { ...cookieOptions, maxAge: 0 })
+        .send({ success: true });
+    });
+
     // Send a ping to confirm a successful connection to DB
     await client.db('admin').command({ ping: 1 });
     console.log(

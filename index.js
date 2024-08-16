@@ -158,6 +158,12 @@ async function run() {
       res.send(result);
     });
 
+    // Get products count
+    app.get('/products-count', async (req, res) => {
+      const count = await productCollection.countDocuments();
+      res.send({ count });
+    });
+
     // Send a ping to confirm a successful connection to DB
     await client.db('admin').command({ ping: 1 });
     console.log(

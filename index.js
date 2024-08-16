@@ -89,6 +89,15 @@ async function run() {
       res.send(result);
     });
 
+    // Get all products
+    app.get('/all-products', async (req, res) => {
+      const result = await productCollection.find().toArray();
+      res.send(result);
+    });
+
+
+    
+
     // Send a ping to confirm a successful connection to DB
     await client.db('admin').command({ ping: 1 });
     console.log(

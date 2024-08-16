@@ -131,6 +131,33 @@ async function run() {
       res.send(result);
     });
 
+    // Get products by pagination
+    app.get('/all-products-by-pagination', async (req, res) => {
+      const size = parseInt(req.query.size);
+      const page = parseInt(req.query.page) - 1;
+      const sortPrice = req.query.sortPrice;
+      const sortDate = req.query.sortDate;
+      let options = {};
+      if (sortPrice && !sortDate)
+        options = { sort: { price: sortPrice === 'asc' ? 1 : -1 } };
+      if (sortDate && !sortPrice)
+        options = { sort: { date_Time: sortDate === 'asc' ? 1 : -1 } };
+      if (sortPrice && sortDate)
+        options = {
+          sort: {
+            price: sortPrice === 'asc' ? 1 : -1,
+            date_Time: sortDate === 'asc' ? 1 : -1,
+          },
+        };
+      const result = await productCollection
+        .find({}, options)
+        .skip(page * size)
+        .limit(size)
+        .toArray();
+
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection to DB
     await client.db('admin').command({ ping: 1 });
     console.log(

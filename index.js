@@ -164,6 +164,17 @@ async function run() {
       res.send({ count });
     });
 
+    // Get search results
+    app.get('/search-products', async (req, res) => {
+      const search = req.query.search;
+      const query = {
+        name: { $regex: search, $options: 'i' },
+      };
+      const result = await productCollection.find(query).toArray();
+
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection to DB
     await client.db('admin').command({ ping: 1 });
     console.log(

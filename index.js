@@ -81,6 +81,14 @@ async function run() {
         .send({ success: true });
     });
 
+    // products related API
+    // post a product
+    app.post('/add-product', verifyToken, async (req, res) => {
+      const newProduct = req.body;
+      const result = await productCollection.insertOne(newProduct);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection to DB
     await client.db('admin').command({ ping: 1 });
     console.log(

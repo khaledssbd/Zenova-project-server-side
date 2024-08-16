@@ -113,8 +113,15 @@ async function run() {
       res.send(result);
     });
 
-
-    
+    //update a product
+    app.patch('/update-product/:id', verifyToken, async (req, res) => {
+      const ID = req.params.id;
+      const query = { _id: new ObjectId(ID) };
+      const result = await productCollection.updateOne(query, {
+        $set: req.body,
+      });
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection to DB
     await client.db('admin').command({ ping: 1 });

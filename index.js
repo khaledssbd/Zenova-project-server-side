@@ -14,10 +14,8 @@ const corsConfig = {
   origin: [
     'http://localhost:5173',
     'http://localhost:5174',
-    'https://glamspot-khaled.web.app',
-    'https://glamspot-by-khaled.vercel.app',
-    'https://glamspot-by-khaled.surge.sh',
-    'https://glamspot-by-khaled.netlify.app',
+    'https://zenovaaz.vercel.app',
+    'https://zenovaaz.web.app',
   ],
   credentials: true,
 };

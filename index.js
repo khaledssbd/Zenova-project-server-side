@@ -134,24 +134,44 @@ async function run() {
     // Get products by pagination
     app.get('/all-products-by-pagination', async (req, res) => {
       const size = parseInt(req.query.size);
-      const page = parseInt(req.query.page) - 1;
+      const skipablePage = parseInt(req.query.page) - 1;
       const sortPrice = req.query.sortPrice;
       const sortDate = req.query.sortDate;
-      let options = {};
-      if (sortPrice && !sortDate)
-        options = { sort: { price: sortPrice === 'asc' ? 1 : -1 } };
-      if (sortDate && !sortPrice)
-        options = { sort: { date_Time: sortDate === 'asc' ? 1 : -1 } };
-      if (sortPrice && sortDate)
-        options = {
-          sort: {
-            price: sortPrice === 'asc' ? 1 : -1,
-            date_Time: sortDate === 'asc' ? 1 : -1,
-          },
+      const minPrice = parseInt(req.query.minPrice);
+      const maxPrice = parseInt(req.query.maxPrice);
+      const category = req.query.category;
+
+
+      let filter = {};
+      // Case 1: Filter by category only
+      if (category && isNaN(minPrice) && isNaN(maxPrice)) {
+        filter = { category: category };
+      }
+
+      // Case 2: Filter by price range only
+      if (!isNaN(minPrice) && !isNaN(maxPrice) && !category) {
+        filter = { price: { $lte: maxPrice, $gte: minPrice } };
+      }
+
+      // Case 3: Filter by price range and category
+      if (!isNaN(minPrice) && !isNaN(maxPrice) && category) {
+        filter = {
+          price: { $lte: maxPrice, $gte: minPrice },
+          category: category,
         };
+      }
+
+      let options = {};
+      if (sortPrice) {
+        options = { sort: { price: sortPrice === 'asc' ? 1 : -1 } };
+      }
+      if (sortDate) {
+        options = { sort: { date_Time: sortDate === 'asc' ? 1 : -1 } };
+      }
+
       const result = await productCollection
-        .find({}, options)
-        .skip(page * size)
+        .find(filter, options)
+        .skip(skipablePage * size)
         .limit(size)
         .toArray();
 
@@ -160,7 +180,29 @@ async function run() {
 
     // Get products count
     app.get('/products-count', async (req, res) => {
-      const count = await productCollection.countDocuments();
+      const minPrice = parseInt(req.query.minPrice);
+      const maxPrice = parseInt(req.query.maxPrice);
+      const category = req.query.category;
+
+      let filter = {};
+      // Case 1: Filter by category only
+      if (category && isNaN(minPrice) && isNaN(maxPrice)) {
+        filter = { category: category };
+      }
+
+      // Case 2: Filter by price range only
+      if (!isNaN(minPrice) && !isNaN(maxPrice) && !category) {
+        filter = { price: { $lte: maxPrice, $gte: minPrice } };
+      }
+
+      // Case 3: Filter by price range and category
+      if (!isNaN(minPrice) && !isNaN(maxPrice) && category) {
+        filter = {
+          price: { $lte: maxPrice, $gte: minPrice },
+          category: category,
+        };
+      }
+      const count = await productCollection.countDocuments(filter);
       res.send({ count });
     });
 
@@ -176,10 +218,10 @@ async function run() {
     });
 
     // Send a ping to confirm a successful connection to DB
-    await client.db('admin').command({ ping: 1 });
-    console.log(
-      'Pinged your deployment. You successfully connected to MongoDB!'
-    );
+    // await client.db('admin').command({ ping: 1 });
+    // console.log(
+    //   'Pinged your deployment. You successfully connected to MongoDB!'
+    // );
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();

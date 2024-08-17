@@ -2,10 +2,8 @@
 
 ## Live site:
 
-- [Zenova on firebase](https://glamspot-khaled.web.app)
-- [Zenova on vercel](https://glamspot-by-khaled.vercel.app)
-- [Zenova on surge](https://glamspot-by-khaled.surge.sh)
-- [Zenova on netlify](https://glamspot-by-khaled.netlify.app)
+- [Zenova on firebase](https://zenovaaz.web.app)
+- [Zenova on vercel](https://zenovaaz.vercel.app)
 
 ## GitHub Repository:
 
@@ -14,21 +12,14 @@
 
 ---
 
-# Project Overview:
-
-- Add your service to database and manage them
-- Book others service as a user
-- provide and update service status in database
-
 # Features
 
 - Loading data in a amazing way with no bug using TanStack Query
 - axiosSecure to force logout a hacker who wants to ge others data
 - Awesome dark theme support
-- react-responsive-carousel, aos Implementation for better UI
-- jspdf for pdf downlaod
 - Environment Variable configuration to save admin data from hackers
-- Regex with Valid email, Uppercase letters, lowercase letters and 6 characters in password
+- Regex with Valid email, Uppercase letters, lowercase letters and 6 characters
+  in password
 - PrivateRoute to make the user login must
 - jwt configuration to configure security
 
@@ -56,6 +47,8 @@ Before you begin, ensure you have the following installed on your local machine:
 - [Git](https://git-scm.com/)
 
 ### Installation
+
+Open a command promgt or vercel terminal and run the following commands-
 
 1. ```bash
    git clone https://github.com/khaledssbd/Zenova-project-server-side
